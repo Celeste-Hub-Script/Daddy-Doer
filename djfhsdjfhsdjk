@@ -1,4 +1,4 @@
-local Themes = {
+return {
 
     {
         Name = "Orange Inferno",
