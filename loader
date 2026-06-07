@@ -1,0 +1,56 @@
+local WindUI = loadstring(game:HttpGet("https://github.com/Footagesus/WindUI/releases/latest/download/main.lua"))()
+local Junkie = loadstring(game:HttpGet("https://jnkie.com/sdk/library.lua"))()
+Junkie.service = "Scripts"
+Junkie.identifier = "1123194"
+Junkie.provider = "Ads"
+
+WindUI.Services.junkiedevelopment = {
+    Name = "Junkie Development", 
+    Icon = "shield-check",
+    Args = { "ServiceId", "ApiKey", "Provider" },
+
+    New = function()
+        local function Verify(key)
+            local result = Junkie.check_key(key)
+            if result and result.valid then
+                if result.message == "KEYLESS" then
+                    getgenv().SCRIPT_KEY = "KEYLESS"
+                    return true, "Keyless mode"
+                elseif result.message == "KEY_VALID" then
+                    getgenv().SCRIPT_KEY = key
+                    return true, "Key valid"
+                else
+                    return false, "Invalid key"
+                end
+            end
+        end
+
+        local function Copy()
+            local link = Junkie.get_key_link()
+            if setclipboard then setclipboard(link) end
+            return link
+        end
+
+        return { Verify = Verify, Copy = Copy }
+    end
+}
+
+local Window = WindUI:CreateWindow({
+    Title = "Havoc Hub", -- CHANGE TITLE HERE!
+    Theme = "Dark",
+    Transparent = true,
+    Resizable = true,
+
+    KeySystem = {
+        Note = "Enter your key to continue.",
+        SaveKey = false,
+        API = {
+            {
+                Title = "Junkie",
+                Desc  = "Click to copy link",
+                Icon  = "key-round",
+                Type  = "junkiedevelopment"
+            }
+        }
+    }
+})
